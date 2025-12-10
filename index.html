@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Mendenhall | Intelligent Systems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            /* Light Mode */
+            --bg-color: #FAEBD7; /* Antique White */
+            --text-color: #111111;
+            --border-color: #111111;
+            --accent-color: #e63928; /* Red */
+            --grid-color: rgba(0, 0, 0, 0.05);
+            
+            --font-stack: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', Courier, monospace;
+        }
+
+        /* DARK MODE PALETTE */
+        body.dark-mode {
+            --bg-color: #0d0d0d;
+            --text-color: #ff9d00;   /* Primary Orange */
+            --border-color: #ff9d00; /* Primary Orange */
+            --accent-color: #21888F; /* Retro Blue */
+            --grid-color: rgba(255, 157, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-stack);
+            color: var(--text-color);
+            overflow-x: hidden;
+            /* Grid texture background */
+            background-image:
+                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            /* UPDATED: Added opacity and included it in transition for smooth page load */
+            opacity: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, opacity 0.5s ease;
+        }
+        
+        /* ------------------------------------------------------------------- */
+        /* --- STICKY NAV AND FLOATING CONTROL BAR (Integrated from projects.html) --- */
+        /* ------------------------------------------------------------------- */
+        
+        /* Floating Control Bar */
+        .controls-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px; 
+            z-index: 2000;
+            
+            /* Bar aesthetics */
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            padding: 4px 8px;
+            box-shadow: 4px 4px 0 var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .float-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.9rem; 
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            text-decoration: none; 
+        }
+
+        .float-btn:hover {
+            color: var(--accent-color);
+        }
+
+        /* Helper for separator and scroll visibility */
+        .separator {
+            width: 2px;
+            height: 15px;
+            background-color: var(--border-color);
+        }
+
+        .scroll-top {
+            display: none; 
+        }
+        
+        .scroll-top.visible {
+            display: flex;
+        }
+        
+        /* Sticky Main Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 5px 5px;
+            background: var(--bg-color);
+            border-bottom: 4px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            /* Padding to clear the floating bar */
+            padding-top: 20px;
+        }
+
+        .nav-logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        
+        /* Original navigation link styles retained for the new sticky nav */
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* --- Layout Container --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: grid;
+            /* Removed row for old nav */
+            grid-template-rows: auto 1fr auto; 
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+
+
+        /* --- Hero Section --- */
+        .hero {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 30px;
+            align-items: start;
+            padding-top: 40px;
+        }
+
+        .hero-red-bar {
+            width: 100%;
+            height: 400px;
+            background-color: var(--accent-color);
+            transform: scaleY(0); 
+            animation: slideInLeft 1s ease-out forwards 0.2s; 
+            transition: background-color 0.3s ease;
+        }
+        /* ... (rest of CSS remains the same) ... */
+        .hero-content {
+            overflow: visible; 
+            padding-top: 10px;
+        }
+
+        .name-badge {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 15px 30px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 8px 8px 0px var(--border-color);
+            border: 2px solid var(--border-color);
+            opacity: 0; 
+            animation: fadeInBadge 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-weight: 900;
+            font-size: clamp(4rem, 9vw, 8rem);
+            text-transform: uppercase;
+            line-height: 0.85;
+            letter-spacing: -3px;
+            opacity: 0; 
+            transform: translateY(100%);
+            animation: textReveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards 0.4s;
+        }
+
+        .hero-subtitle {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0; 
+            animation: fadeIn 1s ease forwards 1.2s;
+        }
+
+        .hero-subtitle span {
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 5px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- Works / Project Section --- */
+        .section-header {
+            font-size: 1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header::after {
+            content: '';
+            height: 2px;
+            flex-grow: 1;
+            background: var(--border-color);
+            transition: background 0.3s;
+        }
+
+        .project-card {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 40px;
+            border-top: 4px solid var(--border-color);
+            padding: 50px 0;
+            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s;
+            position: relative;
+        }
+
+        .project-card:hover {
+            background-color: rgba(128, 128, 128, 0.05);
+            transform: translateX(10px);
+        }
+        
+        body.dark-mode .project-card:hover {
+            background-color: rgba(255, 157, 0, 0.05);
+        }
+
+        .project-index {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .project-stack {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 8px 12px;
+            align-self: flex-start;
+            text-transform: uppercase;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .project-desc {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 90%;
+        }
+
+        .project-link {
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--text-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .project-link span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover span {
+            transform: translateX(10px);
+            color: var(--accent-color);
+        }
+
+        /* --- Curriculum / Skills Section --- */
+        .skills-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            border-top: 5px solid var(--border-color);
+            padding-top: 60px;
+            transition: border-color 0.3s;
+        }
+
+        .skills-intro h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            border-left: 2px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .course-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease, border-color 0.3s;
+        }
+
+        .course-item:first-child {
+            border-top: 1px solid var(--border-color);
+        }
+
+        .course-item:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .course-item:hover .course-code {
+            color: var(--bg-color);
+            background: transparent;
+        }
+
+        .course-code {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 4px 8px;
+            width: fit-content;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- Contact Section --- */
+        .contact-section {
+            padding-top: 60px;
+            border-top: 5px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            transition: border-color 0.3s;
+        }
+
+        .contact-links li {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .contact-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            background: var(--bg-color);
+            padding: 40px;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        
+        body:not(.dark-mode) .contact-form {
+            background: #e0e0e0; /* Grey background only in light mode */
+        }
+
+        .form-group label {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .form-input, 
+        .form-textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--border-color); 
+            padding: 10px 0;
+            font-family: var(--font-stack);
+            font-size: 1.2rem;
+            color: var(--text-color);
+            outline: none;
+            border-radius: 0; 
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, 
+        .form-textarea:focus {
+            border-bottom-color: var(--accent-color);
+            background-color: rgba(128, 128, 128, 0.1);
+        }
+
+        .submit-btn {
+            align-self: flex-start;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 15px 40px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            border: 2px solid var(--accent-color);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            background: transparent;
+            color: var(--accent-color);
+        }
+
+        /* --- Footer Banner --- */
+        .footer-banner {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 5px solid var(--border-color);
+            border-bottom: 5px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .scrolling-text {
+            display: inline-block;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            animation: scrollText 30s linear infinite;
+        }
+
+        .scrolling-text span {
+            margin-right: 50px;
+        }
+        
+        @keyframes scrollText {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* --- Animations --- */
+        @keyframes slideInLeft { from { transform: scaleY(0); transform-origin: top; } to { transform: scaleY(1); transform-origin: top; } }
+        @keyframes textReveal { from { transform: translateY(120%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInBadge { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 900px) {
+            .project-card {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 40px 0;
+            }
+            .skills-section, .contact-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .controls-container {
+                width: 90%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- UNIFIED FLOATING CONTROL BAR (Adapted from projects.html) -->
+    <div class="controls-container">
+        <button id="theme-toggle" class="float-btn" title="Toggle System Mode">
+            Dark Mode [&#9680;]
+        </button>
+        
+        <div id="scroll-separator" class="separator" style="display: none;"></div>
+        
+        <button id="scroll-top" class="float-btn scroll-top" title="Return to Top">
+            Top [&uarr;]
+        </button>
+    </div>
+
+    <!-- STICKY MAIN NAVIGATION (Adapted from projects.html layout, but with index.html links) -->
+    <nav>
+        <div class="nav-logo"></div>
+        <ul>
+            <!-- UPDATED: Pointed Works to projects.html -->
+            <li><a href="projects.html">Works</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- The original <nav> has been moved outside the container and is now sticky -->
+
+        <header class="hero">
+            <div class="hero-red-bar" aria-hidden="true"></div>
+            <div class="hero-content">
+                <div class="name-badge">Thomas Mendenhall</div>
+                <h1>Intelligent<br>Systems</h1>
+            </div>
+        </header>
+
+        <section id="works" class="works-section">
+            <div class="section-header">Selected Projects (2024-2025)</div>
+
+            <article class="project-card">
+                <div class="project-index">01</div>
+                <div class="project-main">
+                    <h3 class="project-title">Spiking Neural<br>Simulation</h3>
+                    <div class="project-stack">PYTHON / SCIPY / 3D VISUALIZATION</div>
+                </div>
+                <div class="project-info">
+                    <p class="project-desc">
+                        An advanced simulation of Izhikevich neuron models featuring autonomous agents for pattern discovery. 
+                        Includes comprehensive metrics (firing rates, synchrony indices) and interactive 3D raster plots to visualize network dynamics.
+                    </p>
+                    <a href="projects.html#project-01" class="project-link">View Details <span>&rarr;</span></a>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-index">02</div>
+                <div class="project-main">
+                    <h3 class="project-title">Evolutionary<br>Game of Life</h3>
+                    <div class="project-stack">PYTORCH / GENETIC ALGORITHMS / CNN</div>
+                </div>
+                <div class="project-info">
+                    <p class="project-desc">
+                        A hybrid system that evolves Convolutional Neural Networks to predict cellular automata states. 
+                        Utilizes tournament selection and crossover mutations to optimize model architecture, achieving high Intersection over Union (IoU) scores.
+                    </p>
+                    <a href="projects.html#project-02" class="project-link">View Details <span>&rarr;</span></a>
+                </div>
+            </article>
+
+            <article class="project-card" style="border-bottom: 4px solid var(--border-color);">
+                <div class="project-index">03</div>
+                <div class="project-main">
+                    <h3 class="project-title">WikiNews<br>AI Analyzer</h3>
+                    <div class="project-stack">SVELTE / FASTAPI / HUGGINGFACE</div>
+                </div>
+                <div class="project-info">
+                    <p class="project-desc">
+                        A full-stack web application for multilingual news analysis. 
+                        Integrates HuggingFace Transformers to perform real-time translation (EN/DE/ES), sentiment analysis, and summarization, with Spacy visualization for dependency parsing.
+                    </p>
+                    <a href="projects.html#project-03" class="project-link">View Details <span>&rarr;</span></a>
+                </div>
+            </article>
+
+        </section>
+
+        <section id="skills" class="skills-section">
+            <div class="skills-intro">
+                <h2>Technical<br>Specifications</h2>
+                <p>
+                    Academic foundation focused on Artificial Intelligence, Data Structures, and Software Engineering. 
+                    Rigorous coursework completed at <strong>Bellevue College</strong>, emphasizing practical application in Python environments.
+                </p>
+            </div>
+            <div class="course-grid">
+                <div class="course-item">
+                    <div class="course-code">AI 400</div>
+                    <div class="course-name">Natural Language Processing</div>
+                    <div class="course-grade">A</div>
+                </div>
+                <div class="course-item">
+                    <div class="course-code">ROBAI 240</div>
+                    <div class="course-name">Programming Machine Learning</div>
+                    <div class="course-grade">A</div>
+                </div>
+                <div class="course-item">
+                    <div class="course-code">AI 410</div>
+                    <div class="course-name">Human-Centered AI Interaction</div>
+                    <div class="course-grade">A</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="contact-info">
+                <div>
+                    <h2 class="contact-header" style="font-size: 3rem; font-weight: 900; margin-bottom: 20px;">Initiate<br>Protocol</h2>
+                </div>
+                <ul class="contact-links">
+                    <li><a href="mailto:email@example.com"><span>EMAIL</span><span>&nearr;</span></a></li>
+                    <li><a href="#"><span>LINKEDIN</span><span>&nearr;</span></a></li>
+                </ul>
+            </div>
+            <form class="contact-form" action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">ID / Name</label>
+                    <input type="text" id="name" name="name" class="form-input" required placeholder="Enter identification">
+                </div>
+                <div class="form-group">
+                    <label for="message">Transmission / Message</label>
+                    <textarea id="message" name="message" class="form-textarea" required placeholder="Type message..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Transmission</button>
+            </form>
+        </section>
+    </div>
+
+    <footer class="footer-banner">
+        <div class="scrolling-text">
+            <span>ARTIFICIAL INTELLIGENCE</span> +
+            <span>NEURAL NETWORKS</span> +
+            <span>EVOLUTIONARY ALGORITHMS</span> +
+            <span>NATURAL LANGUAGE PROCESSING</span> +
+            <span>MACHINE LEARNING</span> +
+        </div>
+    </footer>
+
+    <script>
+        // --- Shared Logic ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const scrollBtn = document.getElementById('scroll-top');
+        const separator = document.getElementById('scroll-separator');
+        const body = document.body;
+
+        // Init Theme
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('visible');
+                // The separator is conditionally displayed only when the scroll-top button is visible
+                separator.style.display = 'block'; 
+            } else {
+                scrollBtn.classList.remove('visible');
+                separator.style.display = 'none';
+            }
+        });
+
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // --- Smooth Page Transition Logic ---
+        
+        // 1. Fade In on Load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // 2. Fade Out on Link Click
+        document.addEventListener('click', e => {
+            const link = e.target.closest('a');
+            if (link) {
+                const href = link.getAttribute('href');
+                // Only intercept internal links that are not anchors (#)
+                if (href && !href.startsWith('#') && !href.startsWith('mailto:') && link.target !== '_blank') {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500); // 500ms match CSS transition
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
