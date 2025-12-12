@@ -24,9 +24,9 @@
         /* DARK MODE PALETTE */
         body.dark-mode {
             --bg-color: #0d0d0d;
-            --text-color: #ff9d00;   /* Primary Orange */
-            --border-color: #ff9d00; /* Primary Orange */
-            --accent-color: #21888F; /* Retro Blue */
+            --text-color: #f8681a;   /* Rust */
+            --border-color: #f8681a; /* Rust */
+            --accent-color: #11a477; /* Terq */
             --grid-color: rgba(255, 157, 0, 0.08);
         }
 
@@ -203,7 +203,8 @@
         /* ... (rest of CSS remains the same) ... */
         .hero-content {
             overflow: visible; 
-            padding-top: 10px;
+            /* MODIFICATION: Increased padding-top from 10px to 50px (10% of the 400px bar height) */
+            padding-top: 50px; 
         }
 
         .name-badge {
@@ -215,7 +216,8 @@
             font-size: 1.4rem;
             letter-spacing: 1px;
             display: inline-block;
-            margin-bottom: 20px;
+            /* INCREASED from 20px to 40px for better visual breathing room */
+            margin-bottom: 40px; 
             box-shadow: 8px 8px 0px var(--border-color);
             border: 2px solid var(--border-color);
             opacity: 0; 
@@ -301,6 +303,10 @@
             transition: color 0.3s;
         }
 
+        .project-main {
+            /* Ensures main content takes its space */
+        }
+
         .project-title {
             font-size: 2.5rem;
             font-weight: 900;
@@ -310,12 +316,15 @@
             letter-spacing: -1px;
         }
 
+        /* MODIFIED: Reduced size and padding for a sleeker look */
         .project-stack {
             font-family: var(--font-mono);
-            font-size: 0.85rem;
+            /* Reduced from 0.85rem */
+            font-size: 0.7rem; 
             background: var(--text-color);
             color: var(--bg-color);
-            padding: 8px 12px;
+            /* Reduced from 8px 12px for approx 20% reduction */
+            padding: 2px 8px; 
             align-self: flex-start;
             text-transform: uppercase;
             transition: background 0.3s, color 0.3s;
@@ -326,6 +335,14 @@
             line-height: 1.5;
             margin-bottom: 30px;
             max-width: 90%;
+        }
+
+        .project-info {
+            /* MODIFICATION: Use Flexbox to center the content vertically and horizontally */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center; /* Ensures the link text is centered if it wraps */
         }
 
         .project-link {
@@ -377,9 +394,9 @@
 
         .course-item {
             display: grid;
-            grid-template-columns: 100px 1fr auto;
+            grid-template-columns: 200px 1fr auto;
             align-items: center;
-            padding: 20px 25px;
+            padding: 5px 6px;
             border-bottom: 1px solid var(--border-color);
             transition: background-color 0.2s ease, border-color 0.3s;
         }
@@ -424,6 +441,7 @@
             font-size: 1rem;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
+            margin-top: 15px; /* Added spacing between links */
         }
 
         .contact-links a {
@@ -451,10 +469,23 @@
         }
         
         body:not(.dark-mode) .contact-form {
-            background: #e0e0e0; /* Grey background only in light mode */
+            background: #eee8e8; /* Grey background only in light mode */
+        }
+
+        /* NEW HEADER STYLE FOR FORM */
+        .form-header {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--text-color);
+            margin-bottom: -10px; /* Pull text slightly closer to inputs */
         }
 
         .form-group label {
+            /* ** REFINEMENT ** */
+            display: block; /* Ensure label is on its own line */
+            margin-bottom: 8px; /* Add slight separation from the input field */
+            
             font-family: var(--font-mono);
             font-size: 0.8rem;
             text-transform: uppercase;
@@ -467,13 +498,21 @@
             background: transparent;
             border: none;
             border-bottom: 2px solid var(--border-color); 
-            padding: 10px 0;
+            /* ** REFINEMENT ** */
+            padding: 12px 0; /* Slightly increased vertical padding */
+            width: 100%; /* Ensure full width */
+            
             font-family: var(--font-stack);
             font-size: 1.2rem;
             color: var(--text-color);
             outline: none;
             border-radius: 0; 
             transition: all 0.3s ease;
+        }
+        
+        /* The textarea now matches the single-line input field visually */
+        .form-textarea {
+            /* Removed min-height and resize to match single-line input visually */
         }
 
         .form-input:focus, 
@@ -501,6 +540,27 @@
             transform: translateY(-5px);
             background: transparent;
             color: var(--accent-color);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* NEW SUCCESS ANIMATIONS */
+        @keyframes impactPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 var(--text-color); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px 2px var(--accent-color); }
+            100% { transform: scale(1); box-shadow: 0 0 10px 0px transparent; }
+        }
+
+        .submit-btn.success-state {
+            background-color: var(--text-color) !important;
+            color: var(--bg-color) !important;
+            border-color: var(--text-color) !important;
+            animation: impactPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; /* Prevent double clicking */
         }
 
         /* --- Footer Banner --- */
@@ -544,6 +604,10 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
                 padding: 40px 0;
+            }
+            /* Ensure project info still centers on smaller screens */
+            .project-card .project-info {
+                justify-content: flex-start; /* Aligns link on the left for better mobile flow */
             }
             .skills-section, .contact-section {
                 grid-template-columns: 1fr;
@@ -603,11 +667,8 @@
                     <h3 class="project-title">Spiking Neural<br>Simulation</h3>
                     <div class="project-stack">PYTHON / SCIPY / 3D VISUALIZATION</div>
                 </div>
+                <!-- project-info is now vertically and horizontally centered -->
                 <div class="project-info">
-                    <p class="project-desc">
-                        An advanced simulation of Izhikevich neuron models featuring autonomous agents for pattern discovery. 
-                        Includes comprehensive metrics (firing rates, synchrony indices) and interactive 3D raster plots to visualize network dynamics.
-                    </p>
                     <a href="projects.html#project-01" class="project-link">View Details <span>&rarr;</span></a>
                 </div>
             </article>
@@ -618,11 +679,8 @@
                     <h3 class="project-title">Evolutionary<br>Game of Life</h3>
                     <div class="project-stack">PYTORCH / GENETIC ALGORITHMS / CNN</div>
                 </div>
+                <!-- project-info is now vertically and horizontally centered -->
                 <div class="project-info">
-                    <p class="project-desc">
-                        A hybrid system that evolves Convolutional Neural Networks to predict cellular automata states. 
-                        Utilizes tournament selection and crossover mutations to optimize model architecture, achieving high Intersection over Union (IoU) scores.
-                    </p>
                     <a href="projects.html#project-02" class="project-link">View Details <span>&rarr;</span></a>
                 </div>
             </article>
@@ -633,11 +691,8 @@
                     <h3 class="project-title">WikiNews<br>AI Analyzer</h3>
                     <div class="project-stack">SVELTE / FASTAPI / HUGGINGFACE</div>
                 </div>
+                <!-- project-info is now vertically and horizontally centered -->
                 <div class="project-info">
-                    <p class="project-desc">
-                        A full-stack web application for multilingual news analysis. 
-                        Integrates HuggingFace Transformers to perform real-time translation (EN/DE/ES), sentiment analysis, and summarization, with Spacy visualization for dependency parsing.
-                    </p>
                     <a href="projects.html#project-03" class="project-link">View Details <span>&rarr;</span></a>
                 </div>
             </article>
@@ -648,25 +703,47 @@
             <div class="skills-intro">
                 <h2>Technical<br>Specifications</h2>
                 <p>
-                    Academic foundation focused on Artificial Intelligence, Data Structures, and Software Engineering. 
-                    Rigorous coursework completed at <strong>Bellevue College</strong>, emphasizing practical application in Python environments.
+<strong>Bachelor of Applied Science in Software Development (AI Concentration)</strong>, graduated Cum Laude from Bellevue College with a 3.67 GPA.
+<br><br>
+My technical foundation is backed by professional experience as an <strong>AI Research Intern at Oak Ridge National Laboratory</strong>, where I optimized climate modeling workflows to reduce processing time by 40%. Skilled in Python, Machine Learning, and Cloud Architecture, I bridge the gap between theoretical AI concepts and scalable, high-performance software solutions.
                 </p>
             </div>
+            <!-- UPDATED: Expanded course list to fill the area -->
             <div class="course-grid">
                 <div class="course-item">
-                    <div class="course-code">AI 400</div>
+                  
                     <div class="course-name">Natural Language Processing</div>
-                    <div class="course-grade">A</div>
+                    
                 </div>
                 <div class="course-item">
-                    <div class="course-code">ROBAI 240</div>
+                    
                     <div class="course-name">Programming Machine Learning</div>
-                    <div class="course-grade">A</div>
+                    
                 </div>
                 <div class="course-item">
-                    <div class="course-code">AI 410</div>
+                   
                     <div class="course-name">Human-Centered AI Interaction</div>
-                    <div class="course-grade">A</div>
+                    
+                </div>
+                <div class="course-item">
+                    
+                    <div class="course-name">Data Structures & Algorithms</div>
+                    
+                </div>
+                <div class="course-item">
+                   
+                    <div class="course-name">Computer Vision</div>
+            
+                </div>
+                <div class="course-item">
+                    
+                    <div class="course-name">Cloud Computing (AWS/Azure)</div>
+                    
+                </div>
+                <div class="course-item">
+                    
+                    <div class="course-name">Linear Algebra</div>
+                    
                 </div>
             </div>
         </section>
@@ -677,11 +754,17 @@
                     <h2 class="contact-header" style="font-size: 3rem; font-weight: 900; margin-bottom: 20px;">Initiate<br>Protocol</h2>
                 </div>
                 <ul class="contact-links">
-                    <li><a href="mailto:email@example.com"><span>EMAIL</span><span>&nearr;</span></a></li>
-                    <li><a href="#"><span>LINKEDIN</span><span>&nearr;</span></a></li>
+                    <!-- REMOVED EMAIL LINK -->
+                    <li><a href="https://www.linkedin.com/in/thomas-mendenhall-tm/" target="_blank"><span>LINKEDIN</span><span>/thomas-mendenhall-tm/ &nearr;</span></a></li>
+                    <li><a href="https://github.com/mendentm" target="_blank"><span>GITHUB</span><span>/mendentm &nearr;</span></a></li>
                 </ul>
             </div>
-            <form class="contact-form" action="#" method="POST">
+            
+            <!-- FORMSPREE INTEGRATION START -->
+            <!-- IMPORTANT: Replace YOUR_FORM_ID_HERE with the ID you get from formspree.io -->
+            <form id="contact-form" class="contact-form" action="https://formspree.io/f/mblnpjdr" method="POST">
+                <!-- ADDED HEADER "EMAIL ME" -->
+                <h3 class="form-header">Email Me</h3>
                 <div class="form-group">
                     <label for="name">ID / Name</label>
                     <input type="text" id="name" name="name" class="form-input" required placeholder="Enter identification">
@@ -690,7 +773,8 @@
                     <label for="message">Transmission / Message</label>
                     <textarea id="message" name="message" class="form-textarea" required placeholder="Type message..."></textarea>
                 </div>
-                <button type="submit" class="submit-btn">Send Transmission</button>
+                <!-- Changed type to "submit" for Formspree -->
+                <button type="submit" id="send-btn" class="submit-btn">Send Transmission</button>
             </form>
         </section>
     </div>
@@ -741,6 +825,62 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
+        // --- NEW FORMSPREE AJAX LOGIC ---
+        // This handles submission without leaving the page, keeping the "immersion"
+        const contactForm = document.getElementById('contact-form');
+        const sendBtn = document.getElementById('send-btn');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // --- SAFETY CHECK START ---
+            // Detect if the user forgot to replace the placeholder ID
+            if (contactForm.action.includes("YOUR_FORM_ID_HERE")) {
+                alert("SYSTEM ALERT: Configuration Incomplete.\n\nTo make this form work:\n1. Register at formspree.io\n2. Create a new form\n3. Paste the provided ID into the HTML code where it says 'YOUR_FORM_ID_HERE'.");
+                return;
+            }
+            // --- SAFETY CHECK END ---
+            
+            // Visual Feedback: sending state
+            const originalBtnText = sendBtn.innerText;
+            sendBtn.innerText = "SENDING TRANSMISSION...";
+            sendBtn.disabled = true;
+
+            const formData = new FormData(contactForm);
+            
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Success state
+                    sendBtn.innerText = "[ TRANSMISSION ESTABLISHED ]";
+                    sendBtn.classList.add('success-state'); // Trigger the animation
+                    contactForm.reset();
+                    
+                    // Reset button after 4 seconds
+                    setTimeout(() => {
+                        sendBtn.innerText = originalBtnText;
+                        sendBtn.disabled = false;
+                        sendBtn.classList.remove('success-state'); // Reset style
+                    }, 4000);
+                } else {
+                    // Error from Formspree (e.g., spam filter)
+                    sendBtn.innerText = "TRANSMISSION ERROR";
+                    sendBtn.disabled = false;
+                }
+            } catch (error) {
+                // Network error
+                sendBtn.innerText = "NETWORK FAILURE";
+                sendBtn.disabled = false;
+            }
+        });
+        
         // --- Smooth Page Transition Logic ---
         
         // 1. Fade In on Load
@@ -751,9 +891,10 @@
         // 2. Fade Out on Link Click
         document.addEventListener('click', e => {
             const link = e.target.closest('a');
+            
             if (link) {
                 const href = link.getAttribute('href');
-                // Only intercept internal links that are not anchors (#)
+                // Only intercept internal links that are not anchors (#), mailto, or external (target="_blank")
                 if (href && !href.startsWith('#') && !href.startsWith('mailto:') && link.target !== '_blank') {
                     e.preventDefault();
                     document.body.style.opacity = '0';
@@ -761,7 +902,7 @@
                         window.location.href = href;
                     }, 500); // 500ms match CSS transition
                 }
-            }
+            } 
         });
     </script>
 

@@ -24,12 +24,12 @@
         /* --- DARK MODE PALETTE (Color Swap Only) --- */
         body.dark-mode {
             --bg-color: #0d0d0d;
-            --text-color: #ff9d00;   /* Primary Orange */
-            --border-color: #ff9d00; /* Primary Orange */
-            --accent-color: #21888F; /* Retro Blue */
+            --text-color: #f8681a;   /* Primary Orange */
+            --border-color: #f8681a; /* Primary Orange */
+            --accent-color: #11a477; /* Retro Blue */
             --panel-bg: #050505;
             --grid-color: rgba(255, 157, 0, 0.08);
-            --highlight-color: #21888F; /* Blue for highlights */
+            --highlight-color: #11a477; /* Blue for highlights */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -141,8 +141,13 @@
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
             transition: all 0.3s ease;
+            /* Added margin-top to allow for better alignment when scrolled */
+            margin-top: 20px; 
+            
+            /* REMOVED: scroll-margin-top logic as we are now using JS for exact centering */
+            position: relative;
         }
-        
+
         /* Specific Fix: Match background in light mode so it blends (transparent feel) */
         body:not(.dark-mode) .project-module { background: var(--bg-color); }
 
@@ -405,7 +410,6 @@
 </head>
 <body>
 
-    <!-- UNIFIED FLOATING CONTROL BAR -->
     <div class="controls-container">
         <button id="theme-toggle" class="float-btn" title="Toggle System Mode">
             Dark Mode [&#9680;]
@@ -434,7 +438,6 @@
 
     <div class="container">
 
-        <!-- PROJECT 01 -->
         <article id="project-01" class="project-module">
             <div class="info-panel">
                 <div>
@@ -459,7 +462,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="repo-btn">
+                <a href="https://github.com/mendentm/Spiking-Network-for-Pattern-Exploration.git" class="repo-btn">
                     Access Source Code &rarr;
                 </a>
             </div>
@@ -475,7 +478,6 @@
             </div>
         </article>
 
-        <!-- PROJECT 02 -->
         <article id="project-02" class="project-module">
             <div class="info-panel">
                 <div>
@@ -500,7 +502,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="repo-btn">
+                <a href="https://github.com/mendentm/Autonomous-Discovery-Pipeline.git" class="repo-btn">
                     Access Source Code &rarr;
                 </a>
             </div>
@@ -522,7 +524,6 @@
             </div>
         </article>
 
-        <!-- PROJECT 03 -->
         <article id="project-03" class="project-module">
             <div class="info-panel">
                 <div>
@@ -547,7 +548,7 @@
                     </div>
                 </div>
 
-                <a href="#" class="repo-btn">
+                <a href="https://github.com/J-Connell-W/Wikinews-Sentiment-Analysis-Tool.git" class="repo-btn">
                     Access Source Code &rarr;
                 </a>
             </div>
@@ -604,7 +605,25 @@
         
         // 1. Fade In on Load
         window.addEventListener('load', () => {
-            document.body.style.opacity = '1';
+            // IMMEDIATE CENTER LOGIC
+            // Only run if there is a hash (user clicked "View Details")
+            if (window.location.hash) {
+                const targetElement = document.querySelector(window.location.hash);
+                if (targetElement) {
+                    // scrollIntoView with block: 'center' calculates the exact center.
+                    // behavior: 'auto' forces an instant jump (no smooth scroll).
+                    targetElement.scrollIntoView({
+                        behavior: 'auto',
+                        block: 'center' 
+                    });
+                }
+            }
+
+            // Reveal the page AFTER the jump has occurred
+            // A tiny timeout ensures the browser has painted the scroll position first
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
         });
 
         // 2. Fade Out on Link Click
