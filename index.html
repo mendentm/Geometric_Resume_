@@ -563,28 +563,30 @@
             pointer-events: none; /* Prevent double clicking */
         }
 
-        /* --- Footer Banner --- */
+        /* --- Refined Footer Banner (Reduced by 60%) --- */
         .footer-banner {
-            background-color: var(--accent-color);
+            background-color: var(--border-color); /* Swapped to border color for a sleeker look */
             color: var(--bg-color);
-            padding: 20px 0;
+            padding: 8px 0; /* Tightened padding */
             overflow: hidden;
             white-space: nowrap;
-            border-top: 5px solid var(--border-color);
-            border-bottom: 5px solid var(--border-color);
+            border-top: 2px solid var(--accent-color); /* Thin accent line */
             transition: all 0.3s;
         }
 
         .scrolling-text {
             display: inline-block;
-            font-weight: 900;
+            font-family: var(--font-mono); /* Switched to Mono for a data-stream look */
+            font-weight: 400;
             text-transform: uppercase;
-            font-size: 1.5rem;
-            animation: scrollText 30s linear infinite;
+            font-size: 0.75rem; /* Significant size reduction */
+            letter-spacing: 2px;
+            animation: scrollText 40s linear infinite; /* Slower for better readability */
         }
 
         .scrolling-text span {
-            margin-right: 50px;
+            margin-right: 100px;
+            opacity: 0.8;
         }
         
         @keyframes scrollText {
@@ -642,8 +644,9 @@
         <ul>
             <!-- UPDATED: Pointed Works to projects.html -->
             <li><a href="projects.html">Works</a></li>
-            <li><a href="#skills">Skills</a></li>
+            <li><a href="#skills" id="skills-nav-link">Skills</a></li>
             <li><a href="#contact">Contact</a></li>
+            
         </ul>
     </nav>
 
@@ -785,7 +788,7 @@ My technical foundation is backed by professional experience as an <strong>AI Re
             <span>NEURAL NETWORKS</span> +
             <span>EVOLUTIONARY ALGORITHMS</span> +
             <span>NATURAL LANGUAGE PROCESSING</span> +
-            <span>MACHINE LEARNING</span> +
+            <span>MACHINE LEARNING</span> 
         </div>
     </footer>
 
@@ -823,6 +826,19 @@ My technical foundation is backed by professional experience as an <strong>AI Re
 
         scrollBtn.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        // Center the Skills section when the nav link is clicked
+        document.getElementById('skills-nav-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const skillsSection = document.getElementById('skills');
+            if (skillsSection) {
+                skillsSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                // Update URL hash without jumping
+                history.pushState(null, null, '#skills');
+            }
         });
 
         // --- NEW FORMSPREE AJAX LOGIC ---
